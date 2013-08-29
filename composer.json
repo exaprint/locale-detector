@@ -1,0 +1,17 @@
+{
+    "name": "menencia/locale-detector",
+    "description": "Locale detector",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Menencia",
+            "email": "menencia@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Menencia": "lib/." }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.8.*@dev"
+    }
+}

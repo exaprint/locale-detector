@@ -64,4 +64,11 @@ class Test extends PHPUnit_Framework_TestCase
         $this->assertContains($dl->getLocale(), LocaleDetector::$locales);
     }
 
+    public function testParseUrl() {
+        $url = 'http://genpdf.exaprint.local.fr';
+        $needles = parse_url($url);
+        preg_match('#\.([a-z]+)$#', $needles['host'], $matches);
+        $this->assertArrayHasKey($matches[1], LocaleDetector::$locales);
+    }
+
 }

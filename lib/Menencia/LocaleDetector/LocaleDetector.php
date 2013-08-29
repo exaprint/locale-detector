@@ -46,7 +46,7 @@ class LocaleDetector
     /**
      * @param array $order
      */
-    protected function setOrder($order)
+    public function setOrder($order)
     {
         $this->order = $order;
     }

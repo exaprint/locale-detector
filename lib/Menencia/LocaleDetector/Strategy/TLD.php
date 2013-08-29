@@ -14,7 +14,7 @@ class TLD implements IStrategy {
     public function detect() {
         if (isset($_SERVER) && array_key_exists('SERVER_NAME', $_SERVER)) {
             $serverName = parse_url($_SERVER['SERVER_NAME']);
-            preg_match('#\.([a-z]+)$#', $serverName, $matches);
+            preg_match('#\.([a-z]+)$#', $serverName['host'], $matches);
             return $matches[1];
         } else {
             return null;

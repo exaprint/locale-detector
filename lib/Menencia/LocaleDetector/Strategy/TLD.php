@@ -9,16 +9,42 @@
 
 namespace Menencia\LocaleDetector\Strategy;
 
-class TLD implements IStrategy {
+class TLD implements IStrategy
+{
 
-    public function detect() {
-        if (isset($_SERVER) && array_key_exists('SERVER_NAME', $_SERVER)) {
-            $serverName = parse_url($_SERVER['SERVER_NAME']);
-            preg_match('#\.([a-z]+)$#', $serverName['host'], $matches);
-            return $matches[1];
-        } else {
-            return null;
+    /** @var array */
+    public static $locales = [
+        "it" => "it-IT",
+        "es" => "es-ES",
+        "pt" => "pt-PT",
+        "uk" => "en-GB",
+        "fr" => "fr-FR",
+    ];
+
+    public function detect()
+    {
+        if (isset($_SERVER) && array_key_exists('SERVER_NAME', $_SERVER) && !empty($_SERVER['SERVER_NAME'])) {
+            $tld = $this->_getTld($_SERVER['SERVER_NAME']);
+            $locale = $this->_getLocaleFromTld($tld);
+            return $locale;
         }
+        return null;
+    }
+
+    protected function _getTld($serverName)
+    {
+        $serverName = parse_url($_SERVER['SERVER_NAME']);
+        preg_match('#\.([a-z]+)$#', $serverName['path'], $matches);
+        $tld = $matches[1];
+        return $tld;
+    }
+
+    protected function _getLocaleFromTld($tld)
+    {
+        if(isset(self::$locales[$tld])){
+            return new \Locale(self::$locales[$tld]);
+        }
+        return null;
     }
 
 }

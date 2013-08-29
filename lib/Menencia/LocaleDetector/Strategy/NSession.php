@@ -11,8 +11,13 @@ namespace Menencia\LocaleDetector\Strategy;
 
 class NSession implements IStrategy {
 
+    public static $fieldName = 'lang';
+
     public function detect() {
-        return (isset($_SESSION) && array_key_exists('lang', $_SESSION)) ? locale_accept_from_http($_SESSION['lang']) : null;
+        if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION[self::$fieldName]) && !empty($_SESSION[self::$fieldName])) {
+            return new \Locale($_SESSION[self::$fieldName]);
+        }
+        return null;
     }
 
 }

@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 use Menencia\LocaleDetector\LocaleDetector;
 
 /**
@@ -16,59 +18,87 @@ class Test extends PHPUnit_Framework_TestCase
     public function testHeader()
     {
         $header = new Menencia\LocaleDetector\Strategy\Header();
+
+        $localeFr = new \Locale('fr-FR');
+
+        $this->assertNull($header->detect());
+
+        $_SERVER["HTTP_ACCEPT_LANGUAGE"] = 'fr-FR';
+
         $locale = $header->detect();
-        if ($locale) {
-            $this->assertArrayHasKey($locale, LocaleDetector::$locales);
-        } else {
-            $this->assertNull($locale);
-        }
+        $this->assertEquals($localeFr, $locale);
+
+        $_SERVER["HTTP_ACCEPT_LANGUAGE"] = null;
+
+        $this->assertNull($header->detect());
+
+        $_SERVER["HTTP_ACCEPT_LANGUAGE"] = '';
+
+        $this->assertNull($header->detect());
     }
 
     public function testCookie()
     {
         $cookie = new Menencia\LocaleDetector\Strategy\Cookie();
+
+        $localeFr = new \Locale('fr-FR');
+
+        $this->assertNull($cookie->detect());
+
+        $_COOKIE['lang'] = 'fr-FR';
+
         $locale = $cookie->detect();
-        if ($locale) {
-            $this->assertArrayHasKey($locale, LocaleDetector::$locales);
-        } else {
-            $this->assertNull($locale);
-        }
+        $this->assertEquals($localeFr, $locale);
+
+        $_COOKIE['lang'] = '';
+
+        $this->assertNull($cookie->detect());
+
     }
 
     public function testTLD()
     {
         $tld = new Menencia\LocaleDetector\Strategy\TLD();
+
+        $localeFr = new Locale('fr-FR');
+
+        $this->assertNull($tld->detect());
+
+        $_SERVER["SERVER_NAME"] = 'www.example.fr';
         $locale = $tld->detect();
-        if ($locale) {
-            $this->assertArrayHasKey($locale, LocaleDetector::$locales);
-        } else {
-            $this->assertNull($locale);
-        }
+
+        $this->assertEquals($localeFr, $locale);
+
+        $_SERVER["SERVER_NAME"] = 'www.example.example';
+        $this->assertNull($tld->detect());
+
+        $_SERVER["SERVER_NAME"] = '';
+        $this->assertNull($tld->detect());
+
     }
 
-    public function testSession()
+    public function testNSession()
     {
         $session = new Menencia\LocaleDetector\Strategy\NSession();
+
+        $localeFr = new Locale('fr-FR');
+
+        $this->assertNull($session->detect());
+
+        $_SESSION['lang'] = 'fr-FR';
+
         $locale = $session->detect();
-        if ($locale) {
-            $this->assertArrayHasKey($locale, LocaleDetector::$locales);
-        } else {
-            $this->assertNull($locale);
-        }
+        $this->assertEquals($localeFr, $locale);
+
+        $_SESSION['lang'] = '';
+        $this->assertNull($session->detect());
+
     }
 
     public function testDetectLocale()
     {
         $dl = new Menencia\LocaleDetector\LocaleDetector();
         $dl->detect();
-        $this->assertContains($dl->getLocale(), LocaleDetector::$locales);
-    }
-
-    public function testParseUrl() {
-        $url = 'http://genpdf.exaprint.local.fr';
-        $needles = parse_url($url);
-        preg_match('#\.([a-z]+)$#', $needles['host'], $matches);
-        $this->assertArrayHasKey($matches[1], LocaleDetector::$locales);
     }
 
 }

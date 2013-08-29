@@ -32,16 +32,14 @@ class LocaleDetector
     protected static $default = 'fr';
 
     /** @var array */
-    public static $locales = [
-        "it" => "it_IT",
-        "es" => "es_ES",
-        "pt" => "pt_PT",
-        "uk" => "en_GB",
-        "fr" => "fr_FR",
-    ];
-
-    /** @var array */
     protected $order = ['TLD', 'Cookie', 'Header', 'NSession'];
+
+    public function __construct()
+    {
+        if (!extension_loaded('intl')) {
+            throw new \Exception('The extension intl must be installed.');
+        }
+    }
 
     /**
      * @param array $order
@@ -55,7 +53,7 @@ class LocaleDetector
     {
         $i = 0;
         while ($i < count($this->order) && $this->current == null) {
-            switch (self::$this->order[$i]) {
+            switch ($this->order[$i]) {
                 case 'TLD':
                     $strategy = new TLD();
                     break;
@@ -77,27 +75,13 @@ class LocaleDetector
         }
 
         if ($this->current == null) {
-            $this->setLocale(locale_get_default());
+            $this->setLocale(\Locale::getDefault());
         }
     }
 
     function setLocale($locale)
     {
-        if (in_array($locale, self::$locales)) {
-            $locale = self::$locales[$locale];
-        } else if (!array_key_exists($locale, self::$locales)) {
-            $locale = 'fr';
-        }
-
         $this->current = $locale;
-
-        #putenv("LC_MESSAGES=" . $this->current);
-        #setlocale(LC_MESSAGES, $this->current);
-        #if (function_exists('bindtextdomain') && function_exists('textdomain')) {
-        #    bindtextdomain("messages", APPLICATION_ROOT . "/locale");
-        #    textdomain("messages");
-        #    bind_textdomain_codeset("messages", "UTF-8");
-        #}
     }
 
     /**

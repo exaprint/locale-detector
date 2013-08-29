@@ -11,8 +11,13 @@ namespace Menencia\LocaleDetector\Strategy;
 
 class Cookie implements IStrategy {
 
+    public static $fieldName = 'lang';
+
     public function detect() {
-        return (isset($_COOKIE) && array_key_exists('lang', $_COOKIE)) ? $_COOKIE['lang']: null;
+        if (isset($_COOKIE[self::$fieldName]) && !empty($_COOKIE[self::$fieldName])) {
+            return new \Locale($_COOKIE[self::$fieldName]);
+        }
+        return null;
     }
 
 }

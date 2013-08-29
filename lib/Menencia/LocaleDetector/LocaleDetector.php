@@ -89,7 +89,7 @@ class LocaleDetector
      */
     public function getLocale()
     {
-        return self::$locales[$this->current];
+        return $this->current;
     }
 
 }

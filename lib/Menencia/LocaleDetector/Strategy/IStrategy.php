@@ -11,6 +11,9 @@ namespace Menencia\LocaleDetector\Strategy;
 
 interface IStrategy {
 
+    /**
+     * @return \Locale
+     */
     public function detect();
 
 }

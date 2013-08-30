@@ -25,7 +25,7 @@ use Menencia\LocaleDetector\Strategy\NSession;
 class LocaleDetector
 {
 
-    /** @var string */
+    /** @var \Collator */
     protected $current;
 
     /** @var string */
@@ -75,7 +75,7 @@ class LocaleDetector
         }
 
         if ($this->current == null) {
-            $this->setLocale(\Locale::getDefault());
+            $this->setLocale(collator_create(\Locale::getDefault()));
         }
     }
 
@@ -89,7 +89,10 @@ class LocaleDetector
      */
     public function getLocale()
     {
-        return $this->current;
+        if ($this->current) {
+            return collator_get_locale($this->current, \Locale::VALID_LOCALE);
+        }
+        return null;
     }
 
 }

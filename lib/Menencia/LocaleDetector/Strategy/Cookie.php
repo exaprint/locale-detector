@@ -15,7 +15,7 @@ class Cookie implements IStrategy {
 
     public function detect() {
         if (isset($_COOKIE[self::$fieldName]) && !empty($_COOKIE[self::$fieldName])) {
-            return new \Locale($_COOKIE[self::$fieldName]);
+            return collator_create($_COOKIE[self::$fieldName]);
         }
         return null;
     }

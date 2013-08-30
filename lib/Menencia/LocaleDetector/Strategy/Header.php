@@ -15,7 +15,7 @@ class Header implements IStrategy {
         if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             $locale = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']);
             if ($locale !== null) {
-                return new \Locale($locale);
+                return collator_create($locale);
             }
         }
         return null;

@@ -15,7 +15,7 @@ class NSession implements IStrategy {
 
     public function detect() {
         if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION[self::$fieldName]) && !empty($_SESSION[self::$fieldName])) {
-            return new \Locale($_SESSION[self::$fieldName]);
+            return collator_create($_SESSION[self::$fieldName]);
         }
         return null;
     }

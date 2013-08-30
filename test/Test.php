@@ -19,7 +19,7 @@ class Test extends PHPUnit_Framework_TestCase
     {
         $header = new Menencia\LocaleDetector\Strategy\Header();
 
-        $localeFr = new \Locale('fr-FR');
+        $localeFr = collator_create('fr-FR');
 
         $this->assertNull($header->detect());
 
@@ -41,7 +41,7 @@ class Test extends PHPUnit_Framework_TestCase
     {
         $cookie = new Menencia\LocaleDetector\Strategy\Cookie();
 
-        $localeFr = new \Locale('fr-FR');
+        $localeFr = collator_create('fr-FR');
 
         $this->assertNull($cookie->detect());
 
@@ -60,7 +60,7 @@ class Test extends PHPUnit_Framework_TestCase
     {
         $tld = new Menencia\LocaleDetector\Strategy\TLD();
 
-        $localeFr = new Locale('fr-FR');
+        $localeFr = collator_create('fr-FR');
 
         $this->assertNull($tld->detect());
 
@@ -81,7 +81,7 @@ class Test extends PHPUnit_Framework_TestCase
     {
         $session = new Menencia\LocaleDetector\Strategy\NSession();
 
-        $localeFr = new Locale('fr-FR');
+        $localeFr = collator_create('fr-FR');
 
         $this->assertNull($session->detect());
 
@@ -93,12 +93,6 @@ class Test extends PHPUnit_Framework_TestCase
         $_SESSION['lang'] = '';
         $this->assertNull($session->detect());
 
-    }
-
-    public function testDetectLocale()
-    {
-        $dl = new Menencia\LocaleDetector\LocaleDetector();
-        $dl->detect();
     }
 
 }

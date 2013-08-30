@@ -42,7 +42,7 @@ class TLD implements IStrategy
     protected function _getLocaleFromTld($tld)
     {
         if(isset(self::$locales[$tld])){
-            return new \Locale(self::$locales[$tld]);
+            return collator_create(self::$locales[$tld]);
         }
         return null;
     }

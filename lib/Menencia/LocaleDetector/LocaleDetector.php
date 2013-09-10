@@ -49,6 +49,9 @@ class LocaleDetector
         $this->order = $order;
     }
 
+    /**
+     * @return string
+     */
     public function detect()
     {
         $i = 0;
@@ -77,15 +80,20 @@ class LocaleDetector
         if ($this->current == null) {
             $this->setLocale(collator_create(\Locale::getDefault()));
         }
+
+        return $this->getLocale();
     }
 
+    /**
+     * @param $locale
+     */
     function setLocale($locale)
     {
         $this->current = $locale;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLocale()
     {

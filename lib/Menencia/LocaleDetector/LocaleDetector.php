@@ -32,7 +32,7 @@ class LocaleDetector
     protected static $default = 'fr';
 
     /** @var array */
-    protected $order = ['TLD', 'Cookie', 'Header', 'NSession'];
+    protected $order = ['TLD', 'Cookie', 'Header', 'NSession', 'IP'];
 
     public function __construct()
     {

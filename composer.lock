@@ -259,12 +259,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "900b501d8bd3e80da58dc6ff3cc9b01393149717"
+                "reference": "c07b181876b6bb688cd49956a79d83857179cba2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/900b501d8bd3e80da58dc6ff3cc9b01393149717",
-                "reference": "900b501d8bd3e80da58dc6ff3cc9b01393149717",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c07b181876b6bb688cd49956a79d83857179cba2",
+                "reference": "c07b181876b6bb688cd49956a79d83857179cba2",
                 "shasum": ""
             },
             "require": {
@@ -328,7 +328,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-08-27 05:37:00"
+            "time": "2013-09-04 04:29:36"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -336,12 +336,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "4edd915891b08e2a0a09b07e93072161854e2484"
+                "reference": "346591b047bc04e22c0f608110087579f7518dba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/4edd915891b08e2a0a09b07e93072161854e2484",
-                "reference": "4edd915891b08e2a0a09b07e93072161854e2484",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/346591b047bc04e22c0f608110087579f7518dba",
+                "reference": "346591b047bc04e22c0f608110087579f7518dba",
                 "shasum": ""
             },
             "require": {
@@ -386,7 +386,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2013-08-14 13:48:07"
+            "time": "2013-08-31 07:18:20"
         },
         {
             "name": "sebastian/diff",

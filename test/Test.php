@@ -1,8 +1,6 @@
 <?php
 
-session_start();
-
-use Menencia\LocaleDetector\LocaleDetector;
+@session_start();
 
 /**
  * Created by JetBrains PhpStorm.
@@ -91,6 +89,24 @@ class Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($localeFr, $locale);
 
         $_SESSION['lang'] = '';
+        $this->assertNull($session->detect());
+
+    }
+
+    public function testIP()
+    {
+        $session = new Menencia\LocaleDetector\Strategy\IP();
+
+        $localeFr = collator_create('fr-FR');
+
+        $this->assertNull($session->detect());
+
+        $_SERVER['REMOTE_ADDR'] = '94.103.129.132';
+
+        $locale = $session->detect();
+        $this->assertEquals($localeFr, $locale);
+
+        $_SERVER['REMOTE_ADDR'] = '';
         $this->assertNull($session->detect());
 
     }

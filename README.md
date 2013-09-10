@@ -23,7 +23,8 @@ $localeDetector->setOrder(['TLD', 'Cookie', 'Header', 'NSession', 'IP']); // opt
 By default, `$field = 'lang';`. This is how you can change that :
 
 ```php
-$localeDetector::fieldName='newlang';
+Cookie::$fieldName = 'newlang';
+NSession::$fieldName = 'newlang';
 ```
 
 Then, you just have to call the detect method and retrieve the locale :

@@ -34,6 +34,9 @@ class LocaleDetector
     /** @var array */
     protected $order = ['TLD', 'Cookie', 'Header', 'NSession', 'IP'];
 
+    /** @var array */
+    protected $_customs = [];
+
     public function __construct()
     {
         if (!extension_loaded('intl')) {
@@ -55,7 +58,7 @@ class LocaleDetector
     public function detect()
     {
         $i = 0;
-        while ($i < count($this->order) && $this->current == null) {
+        while ($i < count($this->order) && $this->current == NULL) {
             switch ($this->order[$i]) {
                 case 'TLD':
                     $strategy = new TLD();
@@ -69,10 +72,19 @@ class LocaleDetector
                 case 'NSession':
                     $strategy = new NSession();
                     break;
+                default:
+                    if (strpos($this->order[$i], 'custom:') == 0) {
+                        $name = substr($this->order[$i], 7);
+                        $locale = $this->_customs[$name]();
+                        $this->setLocale($locale);
+                    }
+                    break;
             };
-            $locale = $strategy->detect();
-            if ($locale != null) {
-                $this->setLocale($locale);
+            if (isset($strategy)) {
+                $locale = $strategy->detect();
+                if ($locale != null) {
+                    $this->setLocale($locale);
+                }
             }
             $i++;
         }
@@ -101,6 +113,15 @@ class LocaleDetector
             return collator_get_locale($this->current, \Locale::VALID_LOCALE);
         }
         return null;
+    }
+
+    /**
+     * @param $name
+     * @param $callback
+     */
+    public function registry($name, $callback)
+    {
+        $this->_customs[$name] = $callback;
     }
 
 }

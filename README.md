@@ -32,3 +32,17 @@ Then, you just have to call the detect method and retrieve the locale :
 ```php
 $locale = $localeDetector->detect();
 ```
+
+## Advanced strategies
+
+You have the possibility to custom you strategy like this :
+
+```php
+$localeDetector->registry('OtherStrategy', function(){
+    return collator_create('fr-FR');
+});
+
+$localeDetector->setOrder(['custom:OtherStrategy']);
+
+$locale = $localeDetector->detect();
+```

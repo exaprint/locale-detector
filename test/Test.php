@@ -111,4 +111,20 @@ class Test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testCustom()
+    {
+        $localeDetector = new Menencia\LocaleDetector\LocaleDetector();
+
+        $localeDetector->registry('OtherStrategy', function(){
+           return collator_create('fr-FR');
+        });
+
+        $localeDetector->setOrder(['custom:OtherStrategy']);
+
+        $locale = $localeDetector->detect();
+
+        $this->assertEquals('fr_FR', $locale);
+
+    }
+
 }

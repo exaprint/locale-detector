@@ -24,8 +24,8 @@ $localeDetector->setOrder(['TLD', 'Cookie', 'Header', 'NSession', 'IP']); // opt
 By default, `$field = 'lang';`. This is how you can change that :
 
 ```php
-Cookie::$fieldName = 'newlang';
-NSession::$fieldName = 'newlang';
+Cookie::$fieldName = 'newFieldName';
+NSession::$fieldName = 'newFieldName';
 ```
 
 Then, you just have to call the detect method and retrieve the locale :
@@ -39,35 +39,36 @@ $locale = $localeDetector->detect();
 You have the possibility to custom your strategy like this :
 
 ```php
-$localeDetector->register('OtherStrategy', function($a){
+$localeDetector->addCallback('MyCallback', function($a){
     return collator_create($a);
 }, ['fr-FR']);
 
-$localeDetector->setOrder(['callback:OtherStrategy']);
-
-$locale = $localeDetector->detect();
+$localeDetector->setOrder(['MyCallback']);
 ```
 
 Maybe you want to extends the Strategy interface :
 
 ```php
-$localeDetector->setOrder(['custom:Path\To\NewStrategy']);
+<?php
 
-$locale = $localeDetector->detect();
-```
-
-And your new Strategy should be like that :
-
-```php
-namespace Path\To\NewStrategy;
-
-class New Strategy implements Menencia\LocaleDetector\Strategy\IStrategy
+class MyStrategy implements IStrategy
 {
 
-    public function detect()
-    {
+    public function getName() {
+        return 'MyStrategy';
+    }
+
+    public function detect() {
         return collator_create('fr-FR');
     }
 
 }
+```
+
+Then, you add to register :
+
+```php
+$localeDetector->registerStrategy(new MyStrategy);
+
+$localeDetector->setOrder(['MyStrategy']);
 ```

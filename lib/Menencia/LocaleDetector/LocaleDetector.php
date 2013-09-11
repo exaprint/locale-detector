@@ -19,6 +19,8 @@ namespace Menencia\LocaleDetector;
 
 use Menencia\LocaleDetector\Strategy\Cookie;
 use Menencia\LocaleDetector\Strategy\Header;
+use Menencia\LocaleDetector\Strategy\IP;
+use Menencia\LocaleDetector\Strategy\IStrategy;
 use Menencia\LocaleDetector\Strategy\TLD;
 use Menencia\LocaleDetector\Strategy\NSession;
 
@@ -26,77 +28,47 @@ class LocaleDetector
 {
 
     /** @var \Collator */
-    protected $current;
-
-    /** @var string */
-    protected static $default = 'fr';
+    public static $current;
 
     /** @var array */
-    protected $order = ['TLD', 'Cookie', 'Header', 'NSession', 'IP'];
+    protected $_order = [];
 
     /** @var array */
-    protected $_customs = [];
+    protected $_strategies = [];
 
     public function __construct()
     {
         if (!extension_loaded('intl')) {
             throw new \Exception('The extension intl must be installed.');
         }
+
+        $this->registerStrategy(new TLD());
+        $this->registerStrategy(new Cookie());
+        $this->registerStrategy(new Header());
+        $this->registerStrategy(new NSession());
+        $this->registerStrategy(new IP());
+
+        $this->setOrder(['TLD', 'Cookie', 'Header', 'NSession', 'IP']);
     }
 
     /**
-     * @param array $order
-     */
-    public function setOrder($order)
-    {
-        $this->order = $order;
-    }
-
-    /**
-     * @return string
+     * @return null|string
      */
     public function detect()
     {
         $i = 0;
-        while ($i < count($this->order) && $this->current == NULL) {
-            switch ($this->order[$i]) {
-                case 'TLD':
-                    $strategy = new TLD();
-                    break;
-                case 'Cookie':
-                    $strategy = new Cookie();
-                    break;
-                case 'Header':
-                    $strategy = new Header();
-                    break;
-                case 'NSession':
-                    $strategy = new NSession();
-                    break;
-                default:
-                    if (strpos($this->order[$i], 'custom:') == 0) {
-                        echo "HERE1";
-                        $name = substr($this->order[$i], 7);
-                        $strategy = new $name();
-                        $strategy->detect();
-                    }
-                    else if (strpos($this->order[$i], 'callback:') == 0) {
-                        echo "HERE2";
-                        $name = substr($this->order[$i], 9);
-                        $locale = call_user_func_array($this->_customs[$name][0], $this->_customs[$name][1]);
-                        $this->setLocale($locale);
-                    }
-                    break;
-            };
-            if (isset($strategy)) {
-                $locale = $strategy->detect();
-                if ($locale != null) {
-                    $this->setLocale($locale);
-                }
-            }
+        while ($i < count($this->_order) && self::$current == NULL) {
+
+            $strategy = $this->_order[$i];
+
+            $locale = $this->_strategies[$strategy];
+
+            $this->setLocale($locale);
+
             $i++;
         }
 
-        if ($this->current == null) {
+        if (self::$current == NULL) {
             $this->setLocale(collator_create(\Locale::getDefault()));
         }
 
@@ -104,11 +76,35 @@ class LocaleDetector
     }
 
     /**
+     * @param $name
+     * @param $callback
+     * @param $args
+     */
+    public function addCallback($name, $callback, $args) {
+        $this->_strategies[$name] = call_user_func_array($callback, $args);
+    }
+
+    /**
+     * @param IStrategy $strategy
+     */
+    public function registerStrategy(IStrategy $strategy) {
+        $this->_strategies[$strategy->getName()] = $strategy->detect();
+    }
+
+    /**
+     * @param array $order
+     */
+    public function setOrder($order)
+    {
+        $this->_order = $order;
+    }
+
+    /**
      * @param $locale
      */
     function setLocale($locale)
     {
-        $this->current = $locale;
+        self::$current = $locale;
     }
 
     /**
@@ -116,20 +112,10 @@ class LocaleDetector
      */
     public function getLocale()
     {
-        if ($this->current) {
-            return collator_get_locale($this->current, \Locale::VALID_LOCALE);
+        if (self::$current) {
+            return collator_get_locale(self::$current, \Locale::VALID_LOCALE);
         }
         return null;
-    }
-
-    /**
-     * @param $name
-     * @param $callback
-     * @param $args
-     */
-    public function register($name, $callback, $args=[])
-    {
-        $this->_customs[$name] = [$callback, $args];
     }
 
 }

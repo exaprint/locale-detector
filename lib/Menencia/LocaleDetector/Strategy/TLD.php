@@ -12,6 +12,10 @@ namespace Menencia\LocaleDetector\Strategy;
 class TLD implements IStrategy
 {
 
+    public function getName() {
+        return 'TLD';
+    }
+
     /** @var array */
     public static $locales = [
         "it" => "it-IT",

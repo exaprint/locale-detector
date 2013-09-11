@@ -111,13 +111,15 @@ class Test extends PHPUnit_Framework_TestCase
 
     }
 
-    public function testNewStrategy()
+    public function testMyCallback()
     {
         $localeDetector = new Menencia\LocaleDetector\LocaleDetector();
 
-        $localeDetector->setOrder(['custom:Menencia\LocaleDetector\Strategy\TLD']);
+        $localeDetector->addCallback('MyCallback', function($a){
+            return collator_create($a);
+        }, ['fr_FR']);
 
-        $_SERVER["SERVER_NAME"] = 'www.example.fr';
+        $localeDetector->setOrder(['MyCallback']);
 
         $locale = $localeDetector->detect();
 
@@ -125,6 +127,18 @@ class Test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testMyStrategy()
+    {
+        $localeDetector = new Menencia\LocaleDetector\LocaleDetector();
 
+        $localeDetector->registerStrategy(new Menencia\LocaleDetector\Strategy\TLD());
+
+        $localeDetector->setOrder(['TLD']);
+
+        $locale = $localeDetector->detect();
+
+        $this->assertEquals('fr_FR', $locale);
+
+    }
 
 }

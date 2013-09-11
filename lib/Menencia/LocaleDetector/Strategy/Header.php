@@ -11,6 +11,10 @@ namespace Menencia\LocaleDetector\Strategy;
 
 class Header implements IStrategy {
 
+    public function getName() {
+        return 'Header';
+    }
+
     public function detect() {
         if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             $locale = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']);

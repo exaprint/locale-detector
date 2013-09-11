@@ -9,11 +9,17 @@
 
 namespace Menencia\LocaleDetector\Strategy;
 
-class Cookie implements IStrategy {
+class Cookie implements IStrategy
+{
+
+    public function getName() {
+        return 'Cookie';
+    }
 
     public static $fieldName = 'lang';
 
-    public function detect() {
+    public function detect()
+    {
         if (isset($_COOKIE[self::$fieldName]) && !empty($_COOKIE[self::$fieldName])) {
             return collator_create($_COOKIE[self::$fieldName]);
         }

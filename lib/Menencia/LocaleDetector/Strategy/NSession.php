@@ -9,7 +9,12 @@
 
 namespace Menencia\LocaleDetector\Strategy;
 
-class NSession implements IStrategy {
+class NSession implements IStrategy
+{
+
+    public function getName() {
+        return 'NSession';
+    }
 
     public static $fieldName = 'lang';
 

@@ -12,6 +12,11 @@ namespace Menencia\LocaleDetector\Strategy;
 interface IStrategy {
 
     /**
+     * @return String
+     */
+    public function getName();
+
+    /**
      * @return \Locale
      */
     public function detect();

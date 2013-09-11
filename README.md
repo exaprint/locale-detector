@@ -35,10 +35,10 @@ $locale = $localeDetector->detect();
 
 ## Advanced strategies
 
-You have the possibility to custom you strategy like this :
+You have the possibility to custom your strategy like this :
 
 ```php
-$localeDetector->registry('OtherStrategy', function(){
+$localeDetector->register('OtherStrategy', function(){
     return collator_create('fr-FR');
 });
 

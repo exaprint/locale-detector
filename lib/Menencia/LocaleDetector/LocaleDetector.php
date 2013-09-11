@@ -119,7 +119,7 @@ class LocaleDetector
      * @param $name
      * @param $callback
      */
-    public function registry($name, $callback)
+    public function register($name, $callback)
     {
         $this->_customs[$name] = $callback;
     }

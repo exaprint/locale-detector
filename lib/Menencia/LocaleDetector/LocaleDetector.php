@@ -75,7 +75,7 @@ class LocaleDetector
                 default:
                     if (strpos($this->order[$i], 'custom:') == 0) {
                         $name = substr($this->order[$i], 7);
-                        $locale = $this->_customs[$name]();
+                        $locale = call_user_func_array($this->_customs[$name][0], $this->_customs[$name][1]);
                         $this->setLocale($locale);
                     }
                     break;
@@ -118,10 +118,11 @@ class LocaleDetector
     /**
      * @param $name
      * @param $callback
+     * @param $args
      */
-    public function register($name, $callback)
+    public function register($name, $callback, $args=[])
     {
-        $this->_customs[$name] = $callback;
+        $this->_customs[$name] = [$callback, $args];
     }
 
 }

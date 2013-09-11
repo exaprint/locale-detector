@@ -115,9 +115,9 @@ class Test extends PHPUnit_Framework_TestCase
     {
         $localeDetector = new Menencia\LocaleDetector\LocaleDetector();
 
-        $localeDetector->register('OtherStrategy', function(){
-           return collator_create('fr-FR');
-        });
+        $localeDetector->register('OtherStrategy', function($a){
+           return collator_create($a);
+        }, ['fr_FR']);
 
         $localeDetector->setOrder(['custom:OtherStrategy']);
 

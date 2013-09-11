@@ -38,9 +38,9 @@ $locale = $localeDetector->detect();
 You have the possibility to custom your strategy like this :
 
 ```php
-$localeDetector->register('OtherStrategy', function(){
-    return collator_create('fr-FR');
-});
+$localeDetector->register('OtherStrategy', function($a){
+    return collator_create($a);
+}, ['fr-FR']);
 
 $localeDetector->setOrder(['custom:OtherStrategy']);
 

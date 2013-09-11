@@ -19,6 +19,7 @@ $localeDetector->setOrder(['TLD', 'Cookie', 'Header', 'NSession', 'IP']); // opt
 * Header: determining locale from `$_SERVER['HTTP_ACCEPT_LANGUAGE']`
 * NSession (Session): determining locale from `$_SESSION[$field]`
 * IP (IP Address): determining locale from `$_SERVER['REMOTE_ADDR']`
+* By default, determining locale from `Locale::getDefault()`
 
 By default, `$field = 'lang';`. This is how you can change that :
 
@@ -42,7 +43,31 @@ $localeDetector->register('OtherStrategy', function($a){
     return collator_create($a);
 }, ['fr-FR']);
 
-$localeDetector->setOrder(['custom:OtherStrategy']);
+$localeDetector->setOrder(['callback:OtherStrategy']);
 
 $locale = $localeDetector->detect();
+```
+
+Maybe you want to extends the Strategy interface :
+
+```php
+$localeDetector->setOrder(['custom:Path\To\NewStrategy']);
+
+$locale = $localeDetector->detect();
+```
+
+And your new Strategy should be like that :
+
+```php
+namespace Path\To\NewStrategy;
+
+class New Strategy implements Menencia\LocaleDetector\Strategy\IStrategy
+{
+
+    public function detect()
+    {
+        return collator_create('fr-FR');
+    }
+
+}
 ```

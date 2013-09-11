@@ -74,7 +74,14 @@ class LocaleDetector
                     break;
                 default:
                     if (strpos($this->order[$i], 'custom:') == 0) {
+                        echo "HERE1";
                         $name = substr($this->order[$i], 7);
+                        $strategy = new $name();
+                        $strategy->detect();
+                    }
+                    else if (strpos($this->order[$i], 'callback:') == 0) {
+                        echo "HERE2";
+                        $name = substr($this->order[$i], 9);
                         $locale = call_user_func_array($this->_customs[$name][0], $this->_customs[$name][1]);
                         $this->setLocale($locale);
                     }

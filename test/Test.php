@@ -111,20 +111,20 @@ class Test extends PHPUnit_Framework_TestCase
 
     }
 
-    public function testCustom()
+    public function testNewStrategy()
     {
         $localeDetector = new Menencia\LocaleDetector\LocaleDetector();
 
-        $localeDetector->register('OtherStrategy', function($a){
-           return collator_create($a);
-        }, ['fr_FR']);
+        $localeDetector->setOrder(['custom:Menencia\LocaleDetector\Strategy\TLD']);
 
-        $localeDetector->setOrder(['custom:OtherStrategy']);
+        $_SERVER["SERVER_NAME"] = 'www.example.fr';
 
         $locale = $localeDetector->detect();
 
         $this->assertEquals('fr_FR', $locale);
 
     }
+
+
 
 }

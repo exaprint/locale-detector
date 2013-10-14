@@ -11,7 +11,7 @@ $localeDetector = new Menencia\LocaleDetector\LocaleDetector();
 This is the actual strategy order, but you can reorder this array or remove some items :
 
 ```php
-$localeDetector->setOrder(['TLD', 'Cookie', 'Header', 'NSession', 'IP']); // optional
+$localeDetector->setOrder(['TLD', 'Cookie', 'Header', 'NSession']); // optional
 ```
 
 * TLD (Top-level domain): determining locale from `$_SERVER['SERVER_NAME']`

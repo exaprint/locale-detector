@@ -46,9 +46,9 @@ class LocaleDetector
         $this->registerStrategy(new Cookie());
         $this->registerStrategy(new Header());
         $this->registerStrategy(new NSession());
-        $this->registerStrategy(new IP());
+        //$this->registerStrategy(new IP());
 
-        $this->setOrder(['TLD', 'Cookie', 'Header', 'NSession', 'IP']);
+        $this->setOrder(['TLD', 'Cookie', 'Header', 'NSession']);
     }
 
     /**

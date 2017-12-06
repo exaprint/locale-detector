@@ -73,6 +73,12 @@ class Test extends PHPUnit_Framework_TestCase
         $_SERVER["SERVER_NAME"] = '';
         $this->assertNull($tld->detect());
 
+        $_SERVER['SERVER_NAME'] = 'www.example.*';
+        $_SERVER['HTTP_HOST'] = 'www.example.fr';
+
+        $locale = $tld->detect();
+
+        $this->assertEquals($localeFr, $locale);
     }
 
     public function testNSession()

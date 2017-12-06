@@ -27,20 +27,26 @@ class TLD implements IStrategy
 
     public function detect()
     {
-        if (isset($_SERVER) && array_key_exists('SERVER_NAME', $_SERVER) && !empty($_SERVER['SERVER_NAME'])) {
-            $tld = $this->_getTld($_SERVER['SERVER_NAME']);
-            $locale = $this->_getLocaleFromTld($tld);
-            return $locale;
+        if (!isset($_SERVER)) {
+            return null;
+        }
+        foreach (array('SERVER_NAME', 'HTTP_HOST') as $serverKey) {
+            if (!array_key_exists($serverKey, $_SERVER) || empty($_SERVER[$serverKey])) {
+                continue;
+            }
+            if (!$tld = $this->_getTld($_SERVER[$serverKey])) {
+                continue;
+            }
+            return $this->_getLocaleFromTld($tld);
         }
         return null;
     }
 
-    protected function _getTld($serverName)
+    protected function _getTld($url)
     {
-        $serverName = parse_url($_SERVER['SERVER_NAME']);
-        preg_match('#\.([a-z]+)$#', $serverName['path'], $matches);
-        $tld = $matches[1];
-        return $tld;
+        $parsedUrl = parse_url($url);
+        preg_match('#\.([a-z]+)$#', $parsedUrl['path'], $matches);
+        return count($matches) ? $matches[1] : false;
     }
 
     protected function _getLocaleFromTld($tld)
